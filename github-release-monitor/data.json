@@ -1,0 +1,5 @@
+{
+	"EOSIO/eos": {"release_id": 11971488},
+	"EOSIO/eosio.contracts": {"release_id": 11865800},
+	"eoscanada/eos-claimer": {"commit_sha": "888de3c1a68d14b9f08b580cd44a099d0a8b50d8"}
+}
