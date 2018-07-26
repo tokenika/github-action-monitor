@@ -15,10 +15,10 @@ nodes = config.get('DEFAULT', 'nodes').split(',')
 checkevery = int(config.get('DEFAULT', 'checkevery'))
 synctolerance = int(config.get('DEFAULT', 'synctolerance'))
 log_level = config.get('logging', 'level')
+log_name = config.get('logging', 'name')
 
 logging.basicConfig(level=getattr(logging, log_level))
-logger = logging.getLogger(__name__)
-
+logger = logging.getLogger(log_name)
 
 while True:
     for node in nodes:
@@ -27,7 +27,7 @@ while True:
         try:
             response = requests.get(f"{node}/v1/chain/get_info")
         except ConnectionError as e:
-            logging.error(f"[failed] - {node}, {str(e)}")
+            logger.error(f"REQUEST_FAILED - {node}, {str(e)}")
             break
 
         if response.status_code == 200:
@@ -37,10 +37,10 @@ while True:
 
             utc_now = datetime.utcnow()
             if head_block_time > utc_now - timedelta(seconds=synctolerance):
-                logging.info(f"[in sync] - {node}")
+                logger.info(f"IN_SYNC - {node}")
             else:
-                logging.warning(f"[out of sync] - {node}, delay:{utc_now-head_block_time} (synctolerance:{synctolerance}s)")
+                logger.warning(f"OUT_OF_SYNC - {node}, delay:{utc_now-head_block_time} (synctolerance:{synctolerance}s)")
         else:
-            logging.error(f"[failed] - {node}, {response.text}")
+            logger.error(f"REQUEST_FAILED - {node}, {response.text}")
 
     sleep(checkevery)
