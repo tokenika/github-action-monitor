@@ -1,0 +1,7 @@
+FROM python:3.7
+
+ADD ./place.py /app/place.py
+
+ENV SLACK_WEBHOOK=https://hooks.slack.com/services/<webhook_secrets>
+
+ENTRYPOINT python /app/place.py
